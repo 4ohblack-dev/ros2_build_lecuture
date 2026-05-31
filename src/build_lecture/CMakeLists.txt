@@ -9,8 +9,15 @@ endif()
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
 
-# 【修正】実際のファイルパス（src/exec_sample1/main.cpp）に合わせました
-add_executable(my_cpp_node src/exec_sample1/main.cpp)
+# Publisher のバイナリ作成と依存関係の紐付け
+add_executable(talker src/publisher_node.cpp)
+ament_target_dependencies(talker rclcpp std_msgs)
+
+# Subscriber のバイナリ作成と依存関係の紐付け
+add_executable(listener src/subscriber_node.cpp)
+ament_target_dependencies(listener rclcpp std_msgs)
+
+
 
 target_include_directories(my_cpp_node PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
@@ -21,7 +28,11 @@ ament_target_dependencies(
   "rclcpp"
 )
 
-install(TARGETS my_cpp_node
-  DESTINATION lib/${PROJECT_NAME})
+# 実行ファイルを適切な場所にインストール
+install(TARGETS
+  talker
+  listener
+  DESTINATION lib/${PROJECT_NAME}
+)
 
 ament_package()
