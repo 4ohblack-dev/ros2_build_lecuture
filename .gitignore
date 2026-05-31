@@ -1,0 +1,10 @@
+# ROS 2 automatic build folders
+build/
+install/
+log/
+
+# OS/Editor files
+.DS_Store
+.vscode/
+.idea/
+*.swp
