@@ -23,7 +23,7 @@ class MinimalPublisher : public rclcpp::Node
     void timer_callback()
     {
         auto message = std_msgs::msg::String();
-        message.data = "Hllo, ROS2! Count: "+std::to_string(count++);
+        message.data = "Hello, ROS2! Count: "+std::to_string(count++);
         RCLCPP_INFO(this->get_logger(),"Publishing: '%s",message.data.c_str());
         publisher->publish(message);
     }
