@@ -28,8 +28,8 @@ class MinimalPublisher : public rclcpp::Node
         publisher->publish(message);
     }
 
-    rclcpp::TimerBase::SharePtr timer;
-    rclcpp::Publisher<std_msgs::msg::String>::SharePtr publisher;
+    rclcpp::TimerBase::SharedPtr timer;
+    rclcpp::Publisher<std_msgs::msg::String>::SharedPtr publisher;
     size_t count; 
 };
 

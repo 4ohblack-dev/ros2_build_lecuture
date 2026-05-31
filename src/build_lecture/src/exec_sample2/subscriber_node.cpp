@@ -18,7 +18,7 @@ class MinimalSubscriber : public rclcpp::Node
         {
             RCLCPP_INFO(this->get_logger(),"I heard: '%s'",msg->data.c_str());
         }
-        rclcpp::Subscription<std_msgs::msg::String>::SharePtr subscription;
+        rclcpp::Subscription<std_msgs::msg::String>::SharedPtr subscription;
 };
 
 int main(int argc,char *argv[])
