@@ -5,7 +5,7 @@
 
 using namespace std::chrono_literals;
 
-class MinimalClient: pubkic rclcpp::Node;
+class MinimalClient: public rclcpp::Node
 {
     public:
     MinimalClient()
@@ -14,12 +14,12 @@ class MinimalClient: pubkic rclcpp::Node;
         client = this->create_client<example_interfaces::srv::AddTwoInts>("add_two_ints");
     }
 
-    void send_reqest(int64_t a,int64_t b)
+    void send_request(int64_t a,int64_t b)
     {
         while(!client->wait_for_service(1s))
         {
             if(!rclcpp::ok()){
-                RCLCPP_INFO8this->get_logger(), "Interrupted while waiting for the service. Exiting.");
+                RCLCPP_INFO(this->get_logger(), "Interrupted while waiting for the service. Exiting.");
                 return;
             }
             RCLCPP_INFO(this->get_logger(), "service not available, waiting again...");   
@@ -50,7 +50,7 @@ int main (int argc,char **argv)
     rclcpp::init(argc,argv);
     auto node=std::make_shared<MinimalClient>();
 
-    node->sendrequest(41,1);
+    node->send_request(41,1);
     rclcpp::shutdown();
 
     return 0;

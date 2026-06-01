@@ -7,25 +7,23 @@ endif()
 
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
-find_package(std_msgs REQUIRED) 
+# std_msgsの代わりに、あるいは追加でexample_interfacesを読み込む
+find_package(example_interfaces REQUIRED) 
 
-add_executable(talker src/exec_sample2/publisher_node.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)
-target_include_directories(talker PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_compile_features(talker PUBLIC cxx_std_17)
+# --- サーバー側の設定 ---
+add_executable(service_server src/exec_sample3/service_server.cpp)# パスは環境に合わせて調整してください
+ament_target_dependencies(service_server rclcpp example_interfaces)
+target_compile_features(service_server PUBLIC cxx_std_17)
 
-add_executable(listener src/exec_sample2/subscriber_node.cpp)
-ament_target_dependencies(listener rclcpp std_msgs)
-target_include_directories(listener PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)
-target_compile_features(listener PUBLIC cxx_std_17)
+# --- クライアント側の設定 ---
+add_executable(service_client src/exec_sample3/service_client.cpp)
+ament_target_dependencies(service_client rclcpp example_interfaces)
+target_compile_features(service_client PUBLIC cxx_std_17)
 
+# --- インストール設定 ---
 install(TARGETS
-  talker
-  listener
+  service_server
+  service_client
   DESTINATION lib/${PROJECT_NAME}
 )
 
