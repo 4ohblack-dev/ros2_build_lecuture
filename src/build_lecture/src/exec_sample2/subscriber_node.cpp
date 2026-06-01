@@ -12,6 +12,7 @@ class MinimalSubscriber : public rclcpp::Node
         (
             "topic",10,std::bind(&MinimalSubscriber::topic_callback,this,std::placeholders::_1)
         );
+        //bind(&MinimalSubscriber::topic_callback,this,std::placeholders::_1) → 裏側で自動起動してほしい関数の設定
     }
     private:
         void topic_callback(const std_msgs::msg::String::SharedPtr msg) const
