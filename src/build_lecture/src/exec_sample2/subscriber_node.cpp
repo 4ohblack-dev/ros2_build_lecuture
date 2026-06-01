@@ -1,6 +1,7 @@
 #include <memory>
 #include "rclcpp/rclcpp.hpp"
 #include "std_msgs/msg/string.hpp"
+#include "./publisher_node.cpp"
 
 class MinimalSubscriber : public rclcpp::Node
 {
@@ -34,14 +35,14 @@ int main(int argc,char *argv[])
 {
     rclcpp::init(argc,argv);
     // 1. プロセス内通信を「有効（true）」にしたオプションを用意する
-    rclcpp:NodeOptions options;
+    rclcpp::NodeOptions options;
     options.use_intra_process_comms(true);
 // 2. 同じオプションを使って、両方のノードのインスタンスを「同じメイン関数内」で作る
     auto talker_node=std::make_shared<MinimalPublisher>(options);
     auto listener_node=std::make_shared<MinimalSubscriber>(options);
 
     // 3. 「Executor（エグゼキュータ）」というまとめ役を用意する
-    rclcpp::executors::SingleThreadedRxecutor executor;
+    rclcpp::executors::SingleThreadedExecutor executor;
 
     executor.add_node(talker_node);
     executor.add_node(listener_node);

@@ -34,10 +34,10 @@ class MinimalPublisher : public rclcpp::Node//rclcpp::Nodeという親クラス�
         //auto message = std_msgs::msg::String();//message箱を用意し、その中のdataという変数に文字列を入れていく
         //message.data = "Hello, ROS2! Count: "+std::to_string(count++);
 
-        auto message = std::make_unique<std_msgs::,sg::String>();
+        auto message = std::make_unique<std_msgs::msg::String>();
         message->data = "Hello, ROS 2 (Intra-process)! Count: " + std::to_string(count++);
 
-        RCLCPP_INFO(this->get_logger(),"Publishing: '%s",message.data.c_str());
+        RCLCPP_INFO(this->get_logger(),"Publishing: '%s",message->data.c_str());
         //ログ出力で、INFOは定期的なログ。
         //第2引数は画面に表示したい文章のフォーマット
         //第3引数は%sの部分に入れたい内容（.c_str()を付けることでC言語でも読み取れる形に変換する）
@@ -51,12 +51,12 @@ class MinimalPublisher : public rclcpp::Node//rclcpp::Nodeという親クラス�
 };
 
 
-int main(int argc,char *argv[])
-{
-    rclcpp::init(argc,argv);//初期化
-    rclcpp::spin(std::make_shared<MinimalPublisher>());
-    //std::make_shared → ROS2ではインスタンス生成にもっともよく用いられ、インスタンスそのものではなく「インスタンスがメモリのどこにあるか」を示すポインタの状態で、実体を作ってくれる
-    //速攻spin関数（イベントが起きるまで待機する）に投げているため、インスタンスが死なずに生き残る
-    rclcpp::shutdown();
-    return 0;
-}
+//int main(int argc,char *argv[])
+//{
+//    rclcpp::init(argc,argv);//初期化
+//    rclcpp::spin(std::make_shared<MinimalPublisher>());
+//    //std::make_shared → ROS2ではインスタンス生成にもっともよく用いられ、インスタンスそのものではなく「インスタンスがメモリのどこにあるか」を示すポインタの状態で、実体を作ってくれる
+//    //速攻spin関数（イベントが起きるまで待機する）に投げているため、インスタンスが死なずに生き残る
+//    rclcpp::shutdown();
+//    return 0;
+//}

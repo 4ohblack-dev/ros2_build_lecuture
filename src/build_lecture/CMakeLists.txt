@@ -11,22 +11,36 @@ find_package(rclcpp REQUIRED)
 find_package(std_msgs REQUIRED) 
 
 #ソースコードをコンパイルして、実行ファイル（バイナリ）を作る
-add_executable(talker src/exec_sample2/publisher_node.cpp)
-ament_target_dependencies(talker rclcpp std_msgs)#作った実行ファイルに、探してきたライブラリを紐づける
-target_include_directories(talker PUBLIC
-  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-  $<INSTALL_INTERFACE:include>)#talkerをビルドするとき、どこにある.hppを読み込むべきかを指定
-target_compile_features(talker PUBLIC cxx_std_17)#talkerをコンパイルするときのC++の規格の設定
+#add_executable(talker src/exec_sample2/publisher_node.cpp)
+#ament_target_dependencies(talker rclcpp std_msgs)#作った実行ファイルに、探してきたライブラリを紐づける
+#target_include_directories(talker PUBLIC
+#  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#  $<INSTALL_INTERFACE:include>)#talkerをビルドするとき、どこにある.hppを読み込むべきかを指定
+#target_compile_features(talker PUBLIC cxx_std_17)#talkerをコンパイルするときのC++の規格の設定
+#
+#add_executable(listener src/exec_sample2/subscriber_node.cpp)
+#ament_target_dependencies(listener rclcpp std_msgs)
+#target_include_directories(listener PUBLIC
+#  $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+#  $<INSTALL_INTERFACE:include>)
+#target_compile_features(listener PUBLIC cxx_std_17)
 
+
+# --- 合体ノード（listener）の設定 ---
+# subscriber_node.cpp の中から publisher_node.cpp を読み込むので、
+# 登録する実行ファイル（ターゲット）はこれ1つだけでOKです。
 add_executable(listener src/exec_sample2/subscriber_node.cpp)
+
 ament_target_dependencies(listener rclcpp std_msgs)
+
 target_include_directories(listener PUBLIC
   $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
   $<INSTALL_INTERFACE:include>)
+
 target_compile_features(listener PUBLIC cxx_std_17)
+
 #installの設定
 install(TARGETS
-  talker
   listener
   DESTINATION lib/${PROJECT_NAME}
 )
