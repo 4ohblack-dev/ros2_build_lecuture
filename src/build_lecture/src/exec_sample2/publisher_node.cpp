@@ -17,8 +17,8 @@ class MinimalPublisher : public rclcpp::Node//rclcpp::Nodeという親クラス�
 {
     //子クラスのインスタンスが作られるとき、子クラスの初期化が始まる前に、まず親クラスの初期化が必要となる。
     public:
-    MinimalPublisher()//ノードが作られる
-    :Node("minimal_publisher")//親クラスに名前を投げて通信基盤を準備（新しく生まれるノードに名前を付け、起動）
+    MinimalPublisher(const rclcpp::NodeOptions & options)//ノードが作られる
+    :Node("minimal_publisher",options)//親クラスに名前を投げて通信基盤を準備（新しく生まれるノードに名前を付け、起動）
     ,count(0)//自身のカウンターを0にリセットする
     {
         publisher = this->create_publisher<std_msgs::msg::String>("topic",10);
@@ -31,13 +31,18 @@ class MinimalPublisher : public rclcpp::Node//rclcpp::Nodeという親クラス�
     private:
     void timer_callback()
     {
-        auto message = std_msgs::msg::String();//message箱を用意し、その中のdataという変数に文字列を入れていく
-        message.data = "Hello, ROS2! Count: "+std::to_string(count++);
+        //auto message = std_msgs::msg::String();//message箱を用意し、その中のdataという変数に文字列を入れていく
+        //message.data = "Hello, ROS2! Count: "+std::to_string(count++);
+
+        auto message = std::make_unique<std_msgs::,sg::String>();
+        message->data = "Hello, ROS 2 (Intra-process)! Count: " + std::to_string(count++);
+
         RCLCPP_INFO(this->get_logger(),"Publishing: '%s",message.data.c_str());
         //ログ出力で、INFOは定期的なログ。
         //第2引数は画面に表示したい文章のフォーマット
         //第3引数は%sの部分に入れたい内容（.c_str()を付けることでC言語でも読み取れる形に変換する）
-        publisher->publish(message);
+        //publisher->publish(message);
+        publisher ->publish(std::move(message));
     }
 
     rclcpp::TimerBase::SharedPtr timer;
